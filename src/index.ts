@@ -1,9 +1,9 @@
-import { logger } from "./utils/logger";
-import { Client, Events, GatewayIntentBits } from "discord.js";
-import KeyvFile from "keyv-file";
-import { VRChat } from "vrchat";
-
-require("dotenv").config();
+import 'dotenv/config';
+import { Client, Events, GatewayIntentBits } from 'discord.js';
+import messageCreate from './discord/messageCreate';
+import { logger } from './utils/logger';
+import './vrchat';
+import { deployCommands, handleCommands } from './discord/deployCommands';
 
 /* Discord Bot*/
 const discordBot = new Client({
@@ -17,24 +17,16 @@ const discordBot = new Client({
 });
 
 discordBot.once(Events.ClientReady, async (readyClient) => {
-  logger.info({ botUser: readyClient.user.displayName }, "Discord bot ready!");
+  logger.info({ botUser: readyClient.user.displayName }, 'Discord bot ready!');
+
+  // Commands
+  readyClient.guilds.cache.forEach(async (guild) => {
+    await deployCommands(guild.id);
+  });
+  handleCommands(readyClient);
+
+  // Event Listeners
+  messageCreate(readyClient);
 });
 
 discordBot.login(process.env.DISCORD_BOT_TOKEN);
-
-/* VRChat Bot */
-const vrchatBot = new VRChat({
-  application: {
-    name: "Gemstone",
-    version: "1.0.0",
-    contact: "jazjasminedev@gmail.com",
-  },
-  keyv: new KeyvFile({ filename: "./cookie.json" }),
-  authentication: {
-    credentials: {
-      username: process.env.VRC_USER_NAME!,
-      password: process.env.VRC_PASSWORD!,
-      totpSecret: process.env.VRC_TOTP_SECRET!,
-    },
-  },
-});
