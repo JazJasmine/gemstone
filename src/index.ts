@@ -1,9 +1,10 @@
 import 'dotenv/config';
-import { Client, Events, GatewayIntentBits } from 'discord.js';
-import messageCreate from './discord/messageCreate';
-import { logger } from './utils/logger';
 import './vrchat';
+import { Client, Events, GatewayIntentBits } from 'discord.js';
+import { logger } from './utils/logger';
 import { deployCommands, handleCommands } from './discord/deployCommands';
+import messageCreate from './discord/messageCreate';
+import guildMemberRemove from './discord/guildMemberRemove';
 
 /* Discord Bot*/
 const discordBot = new Client({
@@ -27,6 +28,7 @@ discordBot.once(Events.ClientReady, async (readyClient) => {
 
   // Event Listeners
   messageCreate(readyClient);
+  guildMemberRemove(readyClient);
 });
 
 discordBot.login(process.env.DISCORD_BOT_TOKEN);

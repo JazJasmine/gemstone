@@ -1,6 +1,6 @@
 import {
   SlashCommandBuilder,
-  type CommandInteraction,
+  type ChatInputCommandInteraction,
   MessageFlags,
 } from 'discord.js';
 import { byDiscordId } from '../../repository/link';
@@ -13,7 +13,7 @@ export const data = new SlashCommandBuilder()
     'Shows the vrc account that is linked to your discord account',
   );
 
-export const execute = async (interaction: CommandInteraction) => {
+export const execute = async (interaction: ChatInputCommandInteraction) => {
   if (!interaction.guild) return;
 
   const result = byDiscordId(interaction.user.id);

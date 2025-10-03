@@ -1,11 +1,4 @@
-import {
-  ChatInputCommandInteraction,
-  Client,
-  GuildMemberRoleManager,
-  MessageFlags,
-  REST,
-  Routes,
-} from 'discord.js';
+import { ChatInputCommandInteraction, Client, REST, Routes } from 'discord.js';
 import { commands } from './commands';
 import { logger } from '../utils/logger';
 
@@ -45,7 +38,9 @@ export const handleCommands = (discordBot: Client) => {
 
     const { commandName } = interaction;
     if (commands[commandName as keyof typeof commands]) {
-      commands[commandName as keyof typeof commands].execute(interaction);
+      commands[commandName as keyof typeof commands].execute(
+        interaction as ChatInputCommandInteraction,
+      );
     }
   });
 };

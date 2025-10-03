@@ -1,6 +1,6 @@
 import {
   SlashCommandBuilder,
-  type CommandInteraction,
+  type ChatInputCommandInteraction,
   MessageFlags,
 } from 'discord.js';
 import { byDiscordId } from '../../repository/link';
@@ -14,7 +14,7 @@ export const data = new SlashCommandBuilder()
     'Removes your linked VRC account. THIS WILL REMOVE YOU FROM THE VRC GROUP',
   );
 
-export const execute = async (interaction: CommandInteraction) => {
+export const execute = async (interaction: ChatInputCommandInteraction) => {
   if (!interaction.guild) return;
 
   const link = byDiscordId(interaction.user.id);
