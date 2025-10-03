@@ -3,11 +3,10 @@ import {
   type CommandInteraction,
   MessageFlags,
 } from 'discord.js';
-import { byDiscordId, remove } from '../../repository/link';
+import { byDiscordId } from '../../repository/link';
 import { discordLog } from '../../utils/logger';
 import { removeFromVrcGroup } from '../../vrchat/group';
-
-const vrcProfileBase = 'https://vrchat.com/home/user';
+import { unlink } from '../../utils/linkProfiles';
 
 export const data = new SlashCommandBuilder()
   .setName('removelink')
@@ -18,8 +17,8 @@ export const data = new SlashCommandBuilder()
 export const execute = async (interaction: CommandInteraction) => {
   if (!interaction.guild) return;
 
-  const result = byDiscordId(interaction.user.id);
-  if (!result) {
+  const link = byDiscordId(interaction.user.id);
+  if (!link) {
     interaction.reply({
       flags: MessageFlags.Ephemeral,
       content: '✅ Removed your linked VRC account',
@@ -27,12 +26,11 @@ export const execute = async (interaction: CommandInteraction) => {
     return;
   }
 
-  try {
-    remove(interaction.user.id);
-  } catch (err) {
+  const unlinkResult = unlink(interaction.user.id);
+  if (!unlinkResult.success) {
     discordLog(
       interaction.client,
-      `Failed to remove a VRC user link on request: ${interaction.user.id}\n\n${err}`,
+      `Failed to remove a VRC user link on request: ${interaction.user.id}\n\n${unlinkResult.reason}`,
     );
 
     interaction.reply({
@@ -44,15 +42,15 @@ export const execute = async (interaction: CommandInteraction) => {
   }
 
   try {
-    await removeFromVrcGroup(result.vrc_user_id);
+    await removeFromVrcGroup(link.vrc_user_id);
     discordLog(
       interaction.client,
-      `Removed user from VRC Group, due to deletion request:\n${result.vrc_user_id}`,
+      `Removed user from VRC Group, due to deletion request:\n${link.vrc_user_id}`,
     );
   } catch (err: any) {
     discordLog(
       interaction.client,
-      `Failed to remove user from VRC Group during deletion request:\n${result.vrc_user_id}\n\n${err}`,
+      `Failed to remove user from VRC Group during deletion request:\n${link.vrc_user_id}\n\n${err}`,
       0xd63509,
     );
   }
