@@ -31,6 +31,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     discordLog(
       interaction.client,
       `Failed to remove a VRC user link on request: ${interaction.user.id}\n\n${unlinkResult.reason}`,
+      0xd63509,
     );
 
     interaction.reply({

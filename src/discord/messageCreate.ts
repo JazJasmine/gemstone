@@ -40,6 +40,7 @@ export default (client: Client) =>
       discordLog(
         client,
         `Failed to add a VRC user link: ${discordUserId}->${vrcUserId}\n\n${result.reason}\n\n${msg.url}`,
+        0xd63509,
       );
 
       msg.reply({

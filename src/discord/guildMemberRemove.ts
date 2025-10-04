@@ -19,6 +19,7 @@ export default (client: Client) =>
       discordLog(
         client,
         `Failed to remove a VRC user link, due a left user: ${discordUserId}->${link.vrc_user_id}\n\n${result.reason}`,
+        0xd63509,
       );
       return;
     }

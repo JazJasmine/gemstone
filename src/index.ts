@@ -1,22 +1,14 @@
 import 'dotenv/config';
 import './vrchat';
-import { Client, Events, GatewayIntentBits } from 'discord.js';
+import { Events } from 'discord.js';
 import { logger } from './utils/logger';
 import { deployCommands, handleCommands } from './discord/deployCommands';
 import messageCreate from './discord/messageCreate';
 import guildMemberRemove from './discord/guildMemberRemove';
+import { discordBot } from './discord';
+import { checkForAgeInstances } from './vrchat/ageGate';
 
-/* Discord Bot*/
-const discordBot = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMessageReactions,
-  ],
-});
-
+/* Discord Bot Setup */
 discordBot.once(Events.ClientReady, async (readyClient) => {
   logger.info({ botUser: readyClient.user.displayName }, 'Discord bot ready!');
 
@@ -32,3 +24,8 @@ discordBot.once(Events.ClientReady, async (readyClient) => {
 });
 
 discordBot.login(process.env.DISCORD_BOT_TOKEN);
+
+/* VRC Bot Setup */
+setInterval(() => {
+  checkForAgeInstances();
+}, 30000);
