@@ -24,13 +24,9 @@ export const checkForAgeInstances = async () => {
             continue;
           }
 
-          const vrcUserId = (result.data as unknown as any).creatorId as string;
-          const link = byVrcId(vrcUserId);
-          const discordUserId = link && link.discord_user_id;
-
           discordLog(
             discordBot,
-            `Found non-age-gated instance in the group, closing...\n\nInstance Creator: ${vrcUserId} (<@${discordUserId}>)`,
+            'Found non-age-gated instance in the group, closing...',
             0xd63509,
           );
 

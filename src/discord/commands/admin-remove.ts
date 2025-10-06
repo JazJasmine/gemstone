@@ -7,7 +7,7 @@ import {
 } from 'discord.js';
 import { byDiscordId } from '../../repository/link';
 import { unlink } from '../../utils/linkProfiles';
-import { removeFromVrcGroup } from '../../vrchat/group';
+import { cancelGroupInvite, removeFromVrcGroup } from '../../vrchat/group';
 import { discordLog } from '../../utils/logger';
 
 export const data = new SlashCommandBuilder()
@@ -69,6 +69,8 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       0xd63509,
     );
   }
+
+  await cancelGroupInvite(link.vrc_user_id);
 
   interaction.reply({
     flags: MessageFlags.Ephemeral,
