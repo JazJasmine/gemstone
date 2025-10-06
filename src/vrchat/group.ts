@@ -1,4 +1,5 @@
 import { vrchatBot } from '.';
+import { failedVrcGroupRemovalCounter } from '../metrics';
 import { logger } from '../utils/logger';
 
 const GROUP_ID = process.env.VRC_GROUP_ID!;
@@ -11,12 +12,13 @@ export const removeFromVrcGroup = async (vrcUserId: string) => {
     path: { groupId: GROUP_ID, userId: vrcUserId },
   });
 
-  // This usally means the user wasn't part of the group
+  // This usually means the user wasn't part of the group
   if (result.error?.message.includes("You don't have permission to do that")) {
     return;
   }
 
   if (result.error) {
+    failedVrcGroupRemovalCounter.inc();
     throw result.error;
   }
 };

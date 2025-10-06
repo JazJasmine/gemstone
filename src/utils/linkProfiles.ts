@@ -1,3 +1,4 @@
+import { failedLinkRemovalCounter } from '../metrics';
 import { byDiscordId, create, remove } from '../repository/link';
 import { logger } from './logger';
 
@@ -36,6 +37,7 @@ export const unlink = (discordUserId: string): UnlinkSuccess | UnlinkError => {
     remove(discordUserId);
     return { success: true };
   } catch (err: any) {
+    failedLinkRemovalCounter.inc();
     logger.error({ err, discordUserId }, 'Failed to remove a link');
     return { success: false, reason: 'DB_ERROR', error: err } as LinkError;
   }

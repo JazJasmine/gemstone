@@ -7,6 +7,7 @@ import messageCreate from './discord/messageCreate';
 import guildMemberRemove from './discord/guildMemberRemove';
 import { discordBot } from './discord';
 import { checkForAgeInstances } from './vrchat/ageGate';
+import { metricServer } from './metrics';
 
 /* Discord Bot Setup */
 discordBot.once(Events.ClientReady, async (readyClient) => {
@@ -29,3 +30,8 @@ discordBot.login(process.env.DISCORD_BOT_TOKEN);
 setInterval(() => {
   checkForAgeInstances();
 }, 30000);
+
+/* Metrics Server */
+metricServer.listen(process.env.METRIC_SERVER_PORT, () => {
+  logger.info('Metric server ready!');
+});

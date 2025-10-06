@@ -1,6 +1,9 @@
 import { vrchatBot } from '.';
 import { discordBot } from '../discord';
-import { byVrcId } from '../repository/link';
+import {
+  failedGroupInstancePollCounter,
+  polledGroupInstanceCounter,
+} from '../metrics';
 import { discordLog, logger } from '../utils/logger';
 
 export const checkForAgeInstances = async () => {
@@ -8,6 +11,8 @@ export const checkForAgeInstances = async () => {
     const result = await vrchatBot.getGroupInstances({
       path: { groupId: process.env.VRC_GROUP_ID! },
     });
+
+    polledGroupInstanceCounter.inc();
 
     if (result.data) {
       for (const instance of result.data) {
@@ -38,6 +43,7 @@ export const checkForAgeInstances = async () => {
               },
             });
           } catch (err) {
+            failedGroupInstancePollCounter.inc();
             discordLog(
               discordBot,
               `Failed to close the instance.\n\nError: ${err}`,
@@ -48,6 +54,7 @@ export const checkForAgeInstances = async () => {
       }
     }
   } catch (err) {
+    failedGroupInstancePollCounter.inc();
     logger.error(err);
     discordLog(
       discordBot,
