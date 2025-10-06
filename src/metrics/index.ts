@@ -9,25 +9,25 @@ prometheus.collectDefaultMetrics({ register });
 
 // Counters
 export const failedVrcGroupRemovalCounter = new prometheus.Counter({
-  name: 'exception_vrc_group_remove_total',
+  name: 'gemstone_exception_vrc_group_remove_total',
   help: 'Total number of exceptions thrown during removing a user from the vrc group',
   registers: [register],
 });
 
 export const failedLinkRemovalCounter = new prometheus.Counter({
-  name: 'exception_link_remove_total',
+  name: 'gemstone_exception_link_remove_total',
   help: 'Total number of exceptions thrown during removing a link between discord and vrc',
   registers: [register],
 });
 
 export const failedGroupInstancePollCounter = new prometheus.Counter({
-  name: 'exception_polling_group_instance_total',
+  name: 'gemstone_exception_polling_group_instance_total',
   help: 'Total number of exceptions thrown during polling for group instances',
   registers: [register],
 });
 
 export const polledGroupInstanceCounter = new prometheus.Counter({
-  name: 'polling_group_instance_total',
+  name: 'gemstone_polling_group_instance_total',
   help: 'Total number of polling for group instances',
   registers: [register],
 });
