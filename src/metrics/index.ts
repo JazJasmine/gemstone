@@ -37,4 +37,9 @@ export const metricServer = express();
 metricServer.get('/metrics', async (_req, res) => {
   res.set('Content-Type', register.contentType);
   res.end(await register.metrics());
+
+  failedVrcGroupRemovalCounter.reset();
+  failedLinkRemovalCounter.reset();
+  failedGroupInstancePollCounter.reset();
+  polledGroupInstanceCounter.reset();
 });

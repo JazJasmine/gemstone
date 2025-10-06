@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
 
-const db = new Database('gemstone.sqlite', { fileMustExist: false });
+const db = new Database('data/gemstone.sqlite', { fileMustExist: false });
 db.pragma('journal_mode = WAL');
 db.pragma('synchronous = NORMAL');
 db.pragma('foreign_keys = ON');
